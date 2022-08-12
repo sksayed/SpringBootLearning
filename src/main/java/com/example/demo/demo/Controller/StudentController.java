@@ -56,7 +56,8 @@ public class StudentController {
         List<Student> studentList = studentRepository.findAll();
         studentList.stream().forEach(student -> {
             StudentIdCard id = new StudentIdCard(faker.code().gtin13(), student);
-            studentIdCardRepo.save(id);
+            student.setStudentIdCard(id);
+            studentRepository.save(student);
         });
 
         return studentIdCardRepo.findAll().toString();
@@ -66,6 +67,12 @@ public class StudentController {
     @GetMapping("/getAllCards")
     public List<StudentIdCard> getAllIdCards () {
         return studentIdCardRepo.findAll().stream().toList();
+    }
+
+    @GetMapping("/deleteAllCards")
+    public List<StudentIdCard> deleteAllIDCards () {
+        studentIdCardRepo.deleteAll();
+        return getAllIdCards();
     }
 
 }
