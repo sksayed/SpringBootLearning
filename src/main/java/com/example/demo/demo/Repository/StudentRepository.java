@@ -19,7 +19,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s FROM Student s where s.firstName like %:firstName% ")
     List<Student> findStudentByFirstNameContaining(@Param("firstName") String firstName);
 
-    List<Student> findAll();
 
     @Transactional
     @Modifying

@@ -32,7 +32,7 @@ public class Book {
     @Column(name = "created_at" , nullable = false )
     private LocalDate createdAt ;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "student_id",
             referencedColumnName = "id",
@@ -41,6 +41,11 @@ public class Book {
             )
     )
     private Student student ;
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
 
 
 }

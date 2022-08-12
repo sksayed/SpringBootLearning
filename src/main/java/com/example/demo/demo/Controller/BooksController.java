@@ -44,15 +44,8 @@ public class BooksController {
             bookRepository.save(b);
             bookList.add(b);
         }
-        List<Student> studentList = new ArrayList<>();
-               studentList = studentRepository.findAll().stream().toList();
-        Random random = new Random();
-        for(int i = 0 ; i< studentList.size() ;i++) {
-           int min = random.nextInt(50);
-           Student s = studentList.get(i) ;
-           s.setBooks(bookList.subList(0,min));
-           studentRepository.save(s);
-        }
+        // one set of book has been created
+
         return "books added ";
     }
 

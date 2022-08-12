@@ -4,45 +4,88 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Student")
 @Table(name = "student")
 @DynamicInsert
 @DynamicUpdate
 public class Student {
+
     @Id
-    @SequenceGenerator(name = "student_sequence", allocationSize = 1,
-            initialValue = 100, sequenceName = "student_sequence")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1,
+            initialValue = 1
+
+    )
+    @GeneratedValue(
+            strategy = SEQUENCE,
+            generator = "student_sequence"
+    )
+    @Column(
+            name = "id"
+    )
     private Long id;
 
-    @Column(name = "first_name", nullable = false, columnDefinition = "TEXT")
+    @Column(
+            name = "first_name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String firstName;
-    @Column(name = "last_name", nullable = false, columnDefinition = "TEXT")
+
+    @Column(
+            name = "last_name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String lastName;
-    @Column(unique = true, name = "email")
+
+    @Column(
+            name = "email",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String email;
+
+    @Column(
+            name = "age",
+            nullable = false
+
+    )
     private Integer age;
 
-    public Student(String firstName, String lastName, String email, Integer age) {
+    @OneToOne(
+            mappedBy = "student",
+            orphanRemoval = true
+    )
+    private StudentIdCard studentIdCard;
+
+    public Student(String firstName,
+                   String lastName,
+                   String email,
+                   Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
     }
 
-    public Student () {
+    public Student() {
 
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-    public Long getId() {
-        return id;
     }
 
     public String getFirstName() {
@@ -77,18 +120,6 @@ public class Student {
         this.age = age;
     }
 
-    //Bi directional mapping
-    @OneToOne(
-            mappedBy = "student"
-    )
-    private StudentIdCard studentIdCard;
-
-    @OneToMany(
-            mappedBy = "student",
-            fetch = FetchType.LAZY
-    )
-    private List<Book> books;
-
     @Override
     public String toString() {
         return "Student{" +
@@ -98,21 +129,5 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 '}';
-    }
-
-    public StudentIdCard getStudentIdCard() {
-        return studentIdCard;
-    }
-
-    public void setStudentIdCard(StudentIdCard studentIdCard) {
-        this.studentIdCard = studentIdCard;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
     }
 }

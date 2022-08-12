@@ -21,8 +21,9 @@ public class StudentController {
     @Autowired
     private StudentIdCardRepo studentIdCardRepo;
 
+    // this method creates students only
     @GetMapping("/createStudents")
-    String doAllThings() {
+    public String doAllThings() {
         Faker faker = new Faker();
         for (int i = 0; i < 20; i++) {
             String fname = faker.name().firstName();
@@ -36,22 +37,35 @@ public class StudentController {
     }
 
     @GetMapping("/getAllStudents")
-    List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll().stream().toList();
     }
 
-    @GetMapping("/getIdCardsFromStudents")
-    List<StudentIdCard> getAllIdCards() {
-        return (List<StudentIdCard>) studentIdCardRepo.findAll();
+    @GetMapping("/deleteAllStudent")
+    public String deleteAllStudents() {
+        studentRepository.deleteAll();
+        if (studentRepository.findAll().isEmpty()) {
+            return "All records deleted ";
+        }
+        return "Records not deleted ";
+    }
+
+    @GetMapping("/createIdCard")
+    public String createStudentIdCard() {
+        Faker faker = new Faker();
+        List<Student> studentList = studentRepository.findAll();
+        studentList.stream().forEach(student -> {
+            StudentIdCard id = new StudentIdCard(faker.code().gtin13(), student);
+            studentIdCardRepo.save(id);
+        });
+
+        return studentIdCardRepo.findAll().toString();
 
     }
 
-    @GetMapping("/getCardNamesFromStudent")
-    List<String> getIDNamesFromStudent() {
-        List<String> s = new ArrayList<>();
-        studentRepository.findAll().forEach(student -> s.add(student.getStudentIdCard().getCardNumber()));
-        return s ;
+    @GetMapping("/getAllCards")
+    public List<StudentIdCard> getAllIdCards () {
+        return studentIdCardRepo.findAll().stream().toList();
     }
-
 
 }
