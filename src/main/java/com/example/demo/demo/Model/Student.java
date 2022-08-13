@@ -21,7 +21,6 @@ public class Student {
             sequenceName = "student_sequence",
             allocationSize = 1,
             initialValue = 1
-
     )
     @GeneratedValue(
             strategy = SEQUENCE,
@@ -166,5 +165,30 @@ public class Student {
 
     public List<Book> getBooks() {
         return this.bookList ;
+    }
+
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST , CascadeType.REMOVE},
+            mappedBy ="student"
+    )
+    private List<Enrolement> enrolementList = new ArrayList<>();
+
+    public void addEnrolement (Enrolement enrolement) {
+        if (enrolement != null) {
+            if(!this.enrolementList.contains(enrolement)){
+                this.enrolementList.add(enrolement);
+                enrolement.addStudent(this);
+            }
+        }
+    }
+
+    public void removeEnrolement (Enrolement enrolement) {
+        if (enrolement != null) {
+            if(this.enrolementList.contains(enrolement)){
+                this.enrolementList.remove(enrolement);
+                enrolement.addStudent(null);
+            }
+        }
     }
 }

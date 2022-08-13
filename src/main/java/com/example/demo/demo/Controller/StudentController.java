@@ -1,7 +1,6 @@
 package com.example.demo.demo.Controller;
 
-import com.example.demo.demo.Model.Student;
-import com.example.demo.demo.Model.StudentIdCard;
+import com.example.demo.demo.Model.*;
 import com.example.demo.demo.Repository.StudentIdCardRepo;
 import com.example.demo.demo.Repository.StudentRepository;
 import com.github.javafaker.Faker;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController()
@@ -72,6 +72,69 @@ public class StudentController {
     public List<StudentIdCard> deleteAllIDCards() {
         studentIdCardRepo.deleteAll();
         return getAllIdCards();
+    }
+
+    @GetMapping("/test")
+    public void testEnrolement () {
+        Faker faker = new Faker();
+
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+        String email = String.format("%s.%s@amigoscode.edu", firstName, lastName);
+        Student student = new Student(
+                firstName,
+                lastName,
+                email,
+                faker.number().numberBetween(17, 55));
+
+        student.addBook(
+                new Book("Clean Code", "sayed"));
+
+        student.addBook(
+                new Book("Think and Grow Rich", "sayed"));
+
+        student.addBook(
+                new Book("Spring Data JPA", "sayed"));
+
+        StudentIdCard studentIdCard = new StudentIdCard(
+                "123456789",
+                student);
+
+        student.setStudentIdCard(studentIdCard);
+
+        student.addEnrolement(new Enrolement(
+                new EnrolmentId(1L, 1L),
+                student,
+                new Course("Computer Science", "IT"),
+                LocalDateTime.now()
+        ));
+
+        student.addEnrolement(new Enrolement(
+                new EnrolmentId(1L, 2L),
+                student,
+                new Course("Amigoscode Spring Data JPA", "IT"),
+                LocalDateTime.now().minusDays(18)
+        ));
+
+        student.addEnrolement(new Enrolement(
+                new EnrolmentId(1L, 2L),
+                student,
+                new Course("Amigoscode Spring Data JPA", "IT"),
+                LocalDateTime.now().minusDays(18)
+        ));
+
+
+        studentRepository.save(student);
+
+        studentRepository.findById(1L)
+                .ifPresent(s -> {
+                    System.out.println("fetch book lazy...");
+                    List<Book> books = student.getBooks();
+                    books.forEach(book -> {
+                        System.out.println(
+                                s.getFirstName() + " borrowed " + book.getBookName());
+                    });
+                });
     }
 
 }
