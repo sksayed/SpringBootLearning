@@ -67,6 +67,14 @@ public class Student {
     )
     private StudentIdCard studentIdCard;
 
+    @OneToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true,
+            fetch = FetchType.LAZY ,
+            mappedBy = "student"
+    )
+    private List<Book> bookList = new ArrayList<>();
+
     public Student(String firstName,
                    String lastName,
                    String email,
@@ -138,5 +146,25 @@ public class Student {
 
     public void setStudentIdCard(StudentIdCard studentIdCard) {
         this.studentIdCard = studentIdCard;
+    }
+
+    public void addBook(Book book) {
+        if (book != null) {
+            this.bookList.add(book);
+            book.setStudent(this);
+        }
+    }
+
+    public void removeBook(Book book) {
+        if (book != null) {
+            if (this.bookList.contains(book)) {
+                bookList.remove(book);
+                book.setStudent(null);
+            }
+        }
+    }
+
+    public List<Book> getBooks() {
+        return this.bookList ;
     }
 }

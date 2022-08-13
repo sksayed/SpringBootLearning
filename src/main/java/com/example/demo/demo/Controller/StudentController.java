@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
@@ -65,12 +64,12 @@ public class StudentController {
     }
 
     @GetMapping("/getAllCards")
-    public List<StudentIdCard> getAllIdCards () {
+    public List<StudentIdCard> getAllIdCards() {
         return studentIdCardRepo.findAll().stream().toList();
     }
 
     @GetMapping("/deleteAllCards")
-    public List<StudentIdCard> deleteAllIDCards () {
+    public List<StudentIdCard> deleteAllIDCards() {
         studentIdCardRepo.deleteAll();
         return getAllIdCards();
     }
