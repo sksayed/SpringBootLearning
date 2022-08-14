@@ -15,6 +15,10 @@ public class EnrolmentId implements Serializable {
     @Column(name = "student_id")
     private Long studentID;
 
+    public EnrolmentId() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -167,6 +167,10 @@ public class Student {
         return this.bookList ;
     }
 
+    public List<Enrolement> getEnrolementList() {
+        return enrolementList;
+    }
+
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST , CascadeType.REMOVE},

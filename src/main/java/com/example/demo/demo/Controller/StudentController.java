@@ -74,8 +74,14 @@ public class StudentController {
         return getAllIdCards();
     }
 
+
+    @GetMapping("/list")
+    public List<Enrolement> enrolementListOfaStudent() {
+        return studentRepository.findById(1L).get().getEnrolementList();
+    }
+
     @GetMapping("/test")
-    public void testEnrolement () {
+    public void testEnrolement() {
         Faker faker = new Faker();
 
         String firstName = faker.name().firstName();

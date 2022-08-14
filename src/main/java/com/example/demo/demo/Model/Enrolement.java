@@ -1,6 +1,8 @@
 package com.example.demo.demo.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,11 +16,13 @@ public class Enrolement {
     @ManyToOne()
     @MapsId("studentID")
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "std_fk_enrlmnt"))
+    @JsonIgnore
     private Student student;
 
     @ManyToOne
     @MapsId("courseID")
     @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name = "course_fk_enrlmnt"))
+    @JsonIgnore
     private Course course;
 
 
