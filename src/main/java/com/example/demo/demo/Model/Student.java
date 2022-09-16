@@ -1,7 +1,9 @@
 package com.example.demo.demo.Model;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,8 +13,8 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Student")
 @Table(name = "student")
-@DynamicInsert
-@DynamicUpdate
+@Getter
+@Setter
 public class Student {
 
     @Id
@@ -67,12 +69,14 @@ public class Student {
     private StudentIdCard studentIdCard;
 
     @OneToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
             orphanRemoval = true,
-            fetch = FetchType.LAZY ,
+            fetch = FetchType.LAZY,
             mappedBy = "student"
     )
-    private List<Book> bookList = new ArrayList<>();
+    //@JsonManagedReference
+    @JsonIgnoreProperties(value = { "student" ,"hibernateLazyInitializer", "handler" }, allowSetters = true)
+    private List<Book> books = new ArrayList<>();
 
     public Student(String firstName,
                    String lastName,
@@ -88,45 +92,6 @@ public class Student {
 
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
 
     @Override
     public String toString() {
@@ -139,60 +104,49 @@ public class Student {
                 '}';
     }
 
-    public StudentIdCard getStudentIdCard() {
-        return studentIdCard;
-    }
-
-    public void setStudentIdCard(StudentIdCard studentIdCard) {
-        this.studentIdCard = studentIdCard;
-    }
 
     public void addBook(Book book) {
         if (book != null) {
-            this.bookList.add(book);
+            this.books.add(book);
             book.setStudent(this);
         }
     }
 
     public void removeBook(Book book) {
         if (book != null) {
-            if (this.bookList.contains(book)) {
-                bookList.remove(book);
+            if (this.books.contains(book)) {
+                books.remove(book);
                 book.setStudent(null);
             }
         }
     }
 
-    public List<Book> getBooks() {
-        return this.bookList ;
-    }
-
-    public List<Enrolement> getEnrolementList() {
-        return enrolementList;
-    }
-
     @OneToMany(
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST , CascadeType.REMOVE},
-            mappedBy ="student"
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            mappedBy = "student"
     )
     private List<Enrolement> enrolementList = new ArrayList<>();
 
-    public void addEnrolement (Enrolement enrolement) {
+    public void addEnrolement(Enrolement enrolement) {
         if (enrolement != null) {
-            if(!this.enrolementList.contains(enrolement)){
+            if (!this.enrolementList.contains(enrolement)) {
                 this.enrolementList.add(enrolement);
                 enrolement.addStudent(this);
             }
         }
     }
 
-    public void removeEnrolement (Enrolement enrolement) {
+    public void removeEnrolement(Enrolement enrolement) {
         if (enrolement != null) {
-            if(this.enrolementList.contains(enrolement)){
+            if (this.enrolementList.contains(enrolement)) {
                 this.enrolementList.remove(enrolement);
                 enrolement.addStudent(null);
             }
         }
+    }
+
+    public List<Book> getBooks() {
+        return this.books;
     }
 }

@@ -44,8 +44,8 @@ public class CustomerController {
         Customer cs = this.repository.findById(id).orElseThrow(() -> {
             return new RuntimeException("Customer Not Found");
         });
-        cs.set_emailAddress(customer.get_emailAddress());
-        cs.set_firstName(customer.get_firstName());
+        cs.setEmailAddress(customer.getEmailAddress());
+        cs.setFirstName(customer.getFirstName());
         return this.repository.save(cs);
     }
 

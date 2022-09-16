@@ -1,14 +1,18 @@
 package com.example.demo.demo.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
 
 @Entity
-@Table(name = "student_id_card" , uniqueConstraints = {@UniqueConstraint(name = "std_id_uk" , columnNames = "card_number")})
+@Getter
+@Setter
+@Table(name = "student_id_card", uniqueConstraints = {@UniqueConstraint(name = "std_id_uk", columnNames = "card_number")})
 public class StudentIdCard {
-
     @Id
     @SequenceGenerator(
             name = "student_card_id_sequence",
@@ -54,21 +58,12 @@ public class StudentIdCard {
     public StudentIdCard() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
 
     @Override
     public String toString() {
         return "StudentIdCard{" +
                 "id=" + id +
                 ", cardNumber='" + cardNumber + '\'' +
-                ", student=" + student +
                 '}';
     }
-
 }

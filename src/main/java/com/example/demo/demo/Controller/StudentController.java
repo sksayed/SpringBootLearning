@@ -6,6 +6,7 @@ import com.example.demo.demo.Repository.StudentRepository;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -50,7 +51,7 @@ public class StudentController {
     }
 
     @GetMapping("/createIdCard")
-    public String createStudentIdCard() {
+    public List<StudentIdCard> createStudentIdCard() {
         Faker faker = new Faker();
         List<Student> studentList = studentRepository.findAll();
         studentList.stream().forEach(student -> {
@@ -59,7 +60,7 @@ public class StudentController {
             studentRepository.save(student);
         });
 
-        return studentIdCardRepo.findAll().toString();
+        return studentIdCardRepo.findAll();
 
     }
 
@@ -75,12 +76,12 @@ public class StudentController {
     }
 
 
-    @GetMapping("/list")
-    public List<Enrolement> enrolementListOfaStudent() {
-        return studentRepository.findById(1L).get().getEnrolementList();
+    @GetMapping("/enrolementList/{studentId}")
+    public List<Enrolement> enrolementListOfaStudent(@PathVariable("studentId") Long id) {
+        return studentRepository.findById(id).get().getEnrolementList();
     }
 
-    @GetMapping("/test")
+    @GetMapping("/test/enrolement")
     public void testEnrolement() {
         Faker faker = new Faker();
 
