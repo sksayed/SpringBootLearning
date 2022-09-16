@@ -32,7 +32,7 @@ public class StudentIdCardController {
     //for getting
     @GetMapping("/{id}")
     public StudentIdCard getStudentIdCardById(@PathVariable(value = "id") Long customerID) {
-        return this.repository.findById(customerID).orElseThrow(() -> new RuntimeException("User not found "));
+        return this.repository.findById(customerID).orElseThrow(() -> new RuntimeException("studentIdCard not found "));
     }
 
     //for adding

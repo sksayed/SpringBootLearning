@@ -1,5 +1,6 @@
 package com.example.demo.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,12 +32,11 @@ public class StudentIdCard {
 
     @Column(
             name = "card_number",
-            nullable = false,
-            length = 15
+            nullable = false
     )
     private String cardNumber;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(
             name = "student_id",
             referencedColumnName = "id",
@@ -44,6 +44,7 @@ public class StudentIdCard {
                     name = "student_id_fk"
             )
     )
+    @JsonIgnoreProperties(value = { "studentIdCard" ,"hibernateLazyInitializer", "handler" }, allowSetters = true)
     private Student student;
 
     public StudentIdCard(String cardNumber) {

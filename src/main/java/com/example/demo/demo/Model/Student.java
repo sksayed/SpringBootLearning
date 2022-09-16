@@ -66,6 +66,7 @@ public class Student {
             orphanRemoval = true,
             cascade = CascadeType.ALL
     )
+    @JsonIgnoreProperties(value = { "student" ,"hibernateLazyInitializer", "handler" }, allowSetters = true)
     private StudentIdCard studentIdCard;
 
     @OneToMany(
