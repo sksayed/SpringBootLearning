@@ -31,7 +31,7 @@ public class Book {
 
 
     @ManyToOne()
-    @JoinColumn(name = "student_id", referencedColumnName = "id" , nullable = false)
+    @JoinColumn(name = "student_id", referencedColumnName = "id" )
     //@JsonBackReference
     @JsonIgnoreProperties(value = { "books" ,"hibernateLazyInitializer", "handler" }, allowSetters = true)
     private Student student;

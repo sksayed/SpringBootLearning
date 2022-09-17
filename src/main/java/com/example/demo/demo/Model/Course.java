@@ -1,12 +1,19 @@
 package com.example.demo.demo.Model;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity(name = "Course")
 @Table(name = "course")
+@NoArgsConstructor
 public class Course {
 
     @Id
@@ -25,10 +32,6 @@ public class Course {
         this.department = department;
     }
 
-    public Course() {
-
-    }
-
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST , CascadeType.REMOVE},
@@ -36,33 +39,7 @@ public class Course {
     )
     private List<Enrolement> enrolementList = new ArrayList<>();
 
-    public String getCourseName() {
-        return courseName;
-    }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<Enrolement> getEnrolementList() {
-        return enrolementList;
-    }
 
     public void addEnrolement (Enrolement enrolement) {
         if (enrolement != null) {

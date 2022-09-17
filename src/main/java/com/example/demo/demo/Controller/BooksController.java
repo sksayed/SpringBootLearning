@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,12 +25,6 @@ public class BooksController {
 
     @Autowired
     private BookRepository bookRepository;
-
-    @GetMapping("/createBooks")
-    public String createBooks() {
-        return "Nothing Created ";
-    }
-
 
     List<Book> getAllBooksTest() {
         Faker faker = new Faker();
@@ -73,7 +68,7 @@ public class BooksController {
         return bookRepository.findAll().stream().toList();
     }
 
-    @GetMapping("/getAllBooks")
+    @GetMapping()
     List<Book> getAll() {
         return bookRepository.findAll();
     }
@@ -84,13 +79,13 @@ public class BooksController {
         return ResponseEntity.ok(b);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     ResponseEntity<Book> updateBook(@PathVariable("id") Long id , @RequestBody Book book) {
         Book b = this.bookRepository.save(book);
         return ResponseEntity.ok(b);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     ResponseEntity<Book> deleteBook(@PathVariable("id") Long id, @RequestBody Book book) {
         Book existingBook = this.bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
@@ -100,12 +95,24 @@ public class BooksController {
         return ResponseEntity.ok(existingBook);
     }
 
-    @GetMapping("/id")
-    ResponseEntity<Book> getBookById(@PathVariable("id") Long id, @RequestBody Book book) {
+    @GetMapping("/{id}")
+    ResponseEntity<Book> getBookById(@PathVariable("id") Long id) {
         Book existingBook = this.bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(existingBook);
+    }
+
+    @GetMapping("/createBooks/{number}")
+    ResponseEntity<List<Book>> createBooks (@PathVariable(value = "number" , required = true) int number) {
+        Faker faker = new Faker();
+        List<Book> books = new ArrayList<>();
+        for (int i = 0 ; i<number ; i++) {
+            Book book = new Book(faker.book().title() , faker.book().author());
+            books.add(book);
+        }
+        this.bookRepository.saveAllAndFlush(books);
+        return ResponseEntity.ok(bookRepository.findAll());
     }
 }
